@@ -1,0 +1,246 @@
+.mindfulness-page {
+    max-width: 1200px;
+}
+
+.mindfulness-layout {
+    display: grid;
+    grid-template-columns: 1fr 480px;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .mindfulness-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.technique-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.technique-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.technique-card {
+    padding: 18px;
+    text-align: left;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: all 0.25s ease;
+}
+
+.technique-card.active,
+.technique-card:not(:disabled):hover {
+    transform: translateY(-2px);
+}
+
+.technique-card:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.technique-emoji {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.technique-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f0f4ff;
+    margin-bottom: 4px;
+}
+
+.technique-desc {
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.technique-pattern {
+    font-size: 11px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.mood-before {
+    padding: 16px;
+}
+
+.session-history {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.session-history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md) !important;
+}
+
+/* Breathing Widget */
+.breathing-area {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.breathing-widget {
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    min-height: 460px;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.breathing-circle-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    height: 220px;
+}
+
+.breathing-circle-outer {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.breathing-circle-inner {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.breathing-phase-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f0f4ff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.breathing-countdown {
+    font-family: 'Outfit', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: #f0f4ff;
+    line-height: 1;
+}
+
+/* Pulse rings */
+.pulse-ring {
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    border: 1px solid;
+    opacity: 0;
+    animation: pulseRing 2s ease-out infinite;
+}
+
+@keyframes pulseRing {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+.breathing-stats {
+    display: flex;
+    gap: 40px;
+}
+
+.breathing-stat {
+    text-align: center;
+}
+
+.breathing-stat-val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #f0f4ff;
+}
+
+.breathing-stat-label {
+    font-size: 11px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.breathing-controls {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.breathing-start-btn {
+    width: 200px;
+    justify-content: center;
+}
+
+/* Post session */
+.post-session {
+    padding: 24px;
+}
+
+.post-session h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f0f4ff;
+    margin-bottom: 8px;
+}
+
+/* Reuse slider from MoodTracker */
+.mood-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    outline: none;
+    margin-top: 8px;
+}
+
+.mood-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--track-color, #8b5cf6);
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+}

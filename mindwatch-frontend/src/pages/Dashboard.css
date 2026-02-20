@@ -1,0 +1,156 @@
+.dashboard {
+    max-width: 1200px;
+}
+
+.dashboard-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.dashboard-streak {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    flex-shrink: 0;
+}
+
+.streak-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #f59e0b;
+    line-height: 1;
+}
+
+.streak-label {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.quote-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+}
+
+.quote-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.quote-text {
+    font-size: 15px;
+    color: #94a3b8;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.stat-card {
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.stat-icon {
+    font-size: 28px;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-suffix {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 2px;
+    color: #6b7280;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.chart-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+
+.doughnut-wrapper {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.quick-actions-section {
+    margin-top: 8px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f0f4ff;
+    margin-bottom: 16px;
+}
+
+.quick-action-card {
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.quick-action-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.quick-action-label {
+    font-weight: 700;
+    font-size: 15px;
+    color: #f0f4ff;
+}
+
+.quick-action-sub {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.quick-action-arrow {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: #4b5563;
+}
+
+.quick-action-card:hover .quick-action-arrow {
+    color: #8b5cf6;
+}
