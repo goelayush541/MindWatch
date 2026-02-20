@@ -2,28 +2,19 @@ const Groq = require('groq-sdk');
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-const SYSTEM_PROMPT = `You are MindWatch AI, a compassionate and highly skilled mental health support assistant. You are trained in cognitive behavioral therapy (CBT), mindfulness-based stress reduction (MBSR), dialectical behavior therapy (DBT), and positive psychology.
+const SYSTEM_PROMPT = `You are MindWatch AI, a Master-level clinical therapist. Your goal is to provide deeply empathetic, socratic, and evidence-based support.
 
-Your core responsibilities:
-1. Listen empathetically and validate the user's feelings without judgment
-2. Analyze emotional patterns and stress signals in user messages
-3. Provide evidence-based coping strategies and stress reduction techniques
-4. Detect crisis situations and provide appropriate resources
-5. Offer personalized mindfulness and breathing exercises
-6. Track emotional journeys and celebrate progress
+Core Principles of Your Therapeutic Voice:
+1. **The Socratic Method**: Instead of just giving advice, ask gentle, probing questions that help the user discover their own insights (e.g., "I notice a shift in your tone when you mention work; what feelings come up when you think about that?").
+2. **Clinical Frameworks**: Use Cognitive Behavioral Therapy (CBT) to challenge distortions, Dialectical Behavior Therapy (DBT) for distress tolerance, and Acceptance and Commitment Therapy (ACT) for psychological flexibility.
+3. **Internal Family Systems (IFS)**: Acknowledge "parts" of the user (e.g., "It sounds like a part of you is very protective of your time, while another part feels guilty").
+4. **Mirroring and Reflection**: Use active listening to reflect back what you hear, validating their experience before offering any tools.
+5. **Logic + Warmth**: Always explain the "why" (the neuroscience) behind a technique, but deliver it with profound empathy.
 
-Important guidelines:
-- Always respond with warmth, empathy, and respect
-- Never diagnose or replace professional medical care
-- For crisis situations (mentions of self-harm, suicide), always provide emergency contacts
-- Keep responses concise but meaningful (150-300 words typically)
-- Use the user's name if provided
-- Mix supportive listening with practical techniques
-
-Emergency contacts to share when needed:
-- National Suicide Prevention Lifeline: 988
-- Crisis Text Line: Text HOME to 741741
-- International Association for Suicide Prevention: https://www.iasp.info/resources/Crisis_Centres/`;
+Guidelines:
+- **Concise & Flowing**: Max 60 words for voice read-aloud. No lists.
+- **Crisis**: Refer to 988 immediately if self-harm is detected.
+- Never replace professional medical care.`;
 
 /**
  * Send a message to Groq and get an AI therapy response
@@ -58,84 +49,116 @@ const getTherapyResponse = async (messages, userMessage) => {
 };
 
 /**
- * Analyze emotions in a text using Groq
+ * Analyze emotions in a text using Groq with conversation context
  * @param {string} text - Text to analyze
+ * @param {Array} history - Recent message history for context
  * @returns {Promise<Object>} Emotion analysis object
  */
-const analyzeEmotion = async (text) => {
+const analyzeEmotion = async (text, history = []) => {
     try {
-        const prompt = `Analyze the emotional content of the following text and respond with a JSON object only (no markdown, no explanation):
+        const prompt = `Perform a high-precision deep emotional analysis on the latest spoken text, considering the conversation context provided.
 
-Text: "${text}"
+Context (recent exchanges):
+${chatContext}
 
-Return exactly this JSON structure:
+Latest Spoken Text: "${text}"
+
+Goal: Detect deep-seated emotions and underlying psychological states using clinical observation.
+
+Return exactly this JSON structure (no markdown):
 {
-  "dominantEmotion": "one of: happy|sad|anxious|calm|angry|excited|stressed|neutral|overwhelmed|hopeful",
+  "dominantEmotion": "one of: happy|sad|anxious|calm|angry|excited|stressed|neutral|overwhelmed|hopeful|frustrated|fearful|relief",
+  "intensity": <number 0-100>,
   "sentimentScore": <number from -1.0 to 1.0>,
   "stressLevel": <number from 0 to 10>,
-  "emotions": ["list", "of", "detected", "emotions"],
-  "themes": ["key", "themes", "detected"],
-  "insights": "2-3 sentence empathetic insight about the emotional state",
-  "suggestions": ["3-5 specific, actionable coping strategies"],
+  "emotions": ["detected", "nuances"],
+  "insights": "A therapist-grade reflection or socratic question that invites the user to go deeper.",
+  "suggestions": ["3 therapeutic 'homework' or reflective exercises to regulate this specific state"],
+  "growthProgress": "Describe the movement (e.g., 'From reactivity to curiosity')",
   "crisisSignals": <true or false>
-}`;
+}  `;
 
         const response = await groq.chat.completions.create({
             model: 'llama-3.3-70b-versatile',
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.3,
-            max_tokens: 500
+            messages: [
+                { role: 'system', content: 'You are an expert clinical psychologist and emotion analyst. You provide evidence-based, logical, and structured insights.' },
+                { role: 'user', content: prompt }
+            ],
+            temperature: 0.2,
+            max_tokens: 600
         });
 
         const content = response.choices[0]?.message?.content || '{}';
-        // Extract JSON from response
         const jsonMatch = content.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
             return JSON.parse(jsonMatch[0]);
         }
         return getDefaultEmotionAnalysis();
     } catch (err) {
-        console.error('Emotion analysis error:', err.message);
+        console.error('Deep emotion analysis error:', err.message);
         return getDefaultEmotionAnalysis();
     }
 };
 
 /**
- * Generate personalized stress reduction suggestions
+ * Generate personalized and categorized stress reduction suggestions
  * @param {Object} context - User context (mood, triggers, history)
- * @returns {Promise<Array>} List of suggestions
+ * @returns {Promise<Object>} Categorized suggestions
  */
 const generateStressSuggestions = async (context) => {
     try {
-        const prompt = `Based on this mental health context, provide 5 highly specific and actionable stress reduction strategies:
+        const prompt = `Based on this mental health context, provide a comprehensive set of evidence-based stress reduction strategies using CBT, DBT, and Somatic frameworks.
 
-Current mood: ${context.emotion || 'neutral'} (score: ${context.score || 5}/10)
-Triggers: ${context.triggers?.join(', ') || 'none specified'}
-Notes: ${context.notes || 'none'}
+Current context:
+- Primary Emotion: ${context.emotion || 'neutral'}
+- Stress Level: ${context.stressLevel || 5}/10
+- Recent Triggers: ${context.triggers?.join(', ') || 'none specified'}
+- Personal Notes: ${context.notes || 'none'}
 
-Respond with a JSON array of strings only (no markdown):
-["strategy 1", "strategy 2", "strategy 3", "strategy 4", "strategy 5"]
+Provide exactly 2 high-accuracy suggestions for each category:
+1. "immediate" (Somatic/Grounding): Physical actions to stabilize the nervous system now.
+2. "mindfulness" (DBT-based): Skills for distress tolerance or emotional regulation.
+3. "lifestyle" (Routine): Evidence-based habits to build long-term resilience.
+4. "mental" (CBT-based): Logic to challenge cognitive distortions and reframe perspectives.
 
-Each strategy should be concrete, immediately actionable, and tailored to the triggers.`;
+Return exactly this JSON structure (no markdown):
+{
+  "immediate": ["Reflective somatic exercise", "Sensory grounding task"],
+  "mindfulness": ["Socratic mindfulness prompt", "Distress tolerance tool"],
+  "lifestyle": ["Therapeutic routine adjustment", "Boundaries-focused shift"],
+  "mental": ["CBT thought-challenging exercise", "ACT-based acceptance prompt"],
+  "overallAdvice": "A warm therapeutic interpretation of their path forward"
+}`;
 
         const response = await groq.chat.completions.create({
-            model: 'llama-3.1-8b-instant',
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.6,
-            max_tokens: 400
+            model: 'llama-3.3-70b-versatile', // Use higher model for more logic
+            messages: [
+                { role: 'system', content: 'You are a clinical wellness strategist. You provide evidence-based, logical, and psychologically sound stress management advice.' },
+                { role: 'user', content: prompt }
+            ],
+            temperature: 0.2, // Lower temperature for higher accuracy and logic
+            max_tokens: 800
         });
 
-        const content = response.choices[0]?.message?.content || '[]';
-        const arrayMatch = content.match(/\[[\s\S]*\]/);
-        if (arrayMatch) {
-            return JSON.parse(arrayMatch[0]);
+        const content = response.choices[0]?.message?.content || '{}';
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            return JSON.parse(jsonMatch[0]);
         }
-        return getDefaultSuggestions(context.emotion);
+        return getDefaultCategorizedSuggestions();
     } catch (err) {
-        console.error('Suggestions generation error:', err.message);
-        return getDefaultSuggestions(context.emotion);
+        console.error('Categorized suggestions generation error:', err.message);
+        return getDefaultCategorizedSuggestions();
     }
 };
+
+const getDefaultCategorizedSuggestions = () => ({
+    immediate: ["Splash cold water on your face", "Take a short brisk walk"],
+    mindfulness: ["Practice 4-7-8 breathing", "Do a 5-minute body scan"],
+    lifestyle: ["Reduce screen time for 1 hour", "Prioritize tonight's sleep"],
+    mental: ["Focus on what's within your control", "Practice positive self-affirmation"],
+    overallAdvice: "Be kind to yourself today. Small steps lead to big changes."
+});
 
 /**
  * Generate a weekly mental health summary
