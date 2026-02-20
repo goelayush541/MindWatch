@@ -43,8 +43,8 @@ router.post('/message', protect, async (req, res) => {
         // Get AI response
         const aiResponse = await getTherapyResponse(session.messages, message);
 
-        // Analyze emotion
-        const emotionData = await analyzeEmotion(message);
+        // Analyze emotion with context
+        const emotionData = await analyzeEmotion(message, session.messages);
 
         // Update the user message emotion
         const lastUserMsg = session.messages[session.messages.length - 1];

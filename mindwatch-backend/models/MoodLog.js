@@ -26,9 +26,10 @@ const moodLogSchema = new mongoose.Schema({
         type: String,
         enum: ['work', 'family', 'health', 'finances', 'relationships', 'sleep', 'exercise', 'diet', 'social', 'personal', 'other']
     }],
-    aiSuggestions: [{
-        type: String
-    }],
+    aiSuggestions: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
+    },
     aiAnalysis: {
         type: String,
         default: ''

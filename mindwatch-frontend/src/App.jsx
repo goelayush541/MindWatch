@@ -12,6 +12,7 @@ import MoodTracker from './pages/MoodTracker';
 import Journal from './pages/Journal';
 import Mindfulness from './pages/Mindfulness';
 import History from './pages/History';
+import VoiceTherapy from './pages/VoiceTherapy';
 
 // Layout
 import Sidebar from './components/Sidebar';
@@ -66,6 +67,7 @@ function AppRoutes() {
                 <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
                 <Route path="/mindfulness" element={<ProtectedRoute><Mindfulness /></ProtectedRoute>} />
                 <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+                <Route path="/voice-therapy" element={<ProtectedRoute><VoiceTherapy /></ProtectedRoute>} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
         </>

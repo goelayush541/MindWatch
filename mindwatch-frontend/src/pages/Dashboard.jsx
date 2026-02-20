@@ -12,6 +12,7 @@ import {
     RiFireLine, RiBarChartLine, RiMentalHealthLine, RiArrowRightLine
 } from 'react-icons/ri';
 import './Dashboard.css';
+import StressTips from '../components/StressTips';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Tooltip, Legend, Filler);
 
@@ -23,6 +24,7 @@ const EMOTION_EMOJIS = {
 const Dashboard = () => {
     const { user } = useAuth();
     const [overview, setOverview] = useState(null);
+    const [latestMood, setLatestMood] = useState(null);
     const [moodTrend, setMoodTrend] = useState([]);
     const [loading, setLoading] = useState(true);
     const [quote, setQuote] = useState('');
@@ -44,10 +46,11 @@ const Dashboard = () => {
         try {
             const [overviewRes, moodRes] = await Promise.all([
                 api.get('/analysis/overview').catch(() => ({ data: { data: null } })),
-                api.get('/mood/stats').catch(() => ({ data: { data: { trend: [] } } }))
+                api.get('/mood/stats').catch(() => ({ data: { data: { trend: [], latestMood: null } } }))
             ]);
             setOverview(overviewRes.data.data);
             setMoodTrend(moodRes.data.data?.trend || []);
+            setLatestMood(moodRes.data.data?.latestMood);
         } finally {
             setLoading(false);
         }
@@ -198,6 +201,9 @@ const Dashboard = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Stress Reduction Tips */}
+            <StressTips context={latestMood} />
         </div>
     );
 };

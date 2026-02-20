@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
     RiDashboardLine, RiChatAiLine, RiEmotionHappyLine,
-    RiBookOpenLine, RiLeafLine, RiHistoryLine,
+    RiBookOpenLine, RiLeafLine, RiHistoryLine, RiMicLine,
     RiLogoutBoxLine, RiMentalHealthLine, RiMenu3Line, RiCloseLine
 } from 'react-icons/ri';
 import './Sidebar.css';
@@ -15,6 +15,7 @@ const navItems = [
     { path: '/journal', icon: RiBookOpenLine, label: 'Journal' },
     { path: '/mindfulness', icon: RiLeafLine, label: 'Mindfulness' },
     { path: '/history', icon: RiHistoryLine, label: 'History' },
+    { path: '/voice-therapy', icon: RiMicLine, label: 'Voice Therapy' },
 ];
 
 const Sidebar = () => {
